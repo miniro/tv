@@ -10,6 +10,8 @@ import America from '@/api/popularity/America.json'
 import English from '@/api/popularity/English.json'
 import Japan from '@/api/popularity/Japan.json'
 import Korea from '@/api/popularity/Korea.json'
+let _ = require('lodash')
+
 export default {
   name: 'LineChart',
   data () {
@@ -39,78 +41,6 @@ export default {
     initChart () {
       this.chart = echarts.init(this.$el)
       this.chart.resize()
-      // 绘制图表
-      var option = {
-      // 标题
-        title: {
-          text: 'TMDB部分剧集热度'
-        },
-        grid: {
-          left: '5%'
-        },
-        tooltip: {
-          trigger: 'axis',
-          // 当鼠标移动到数值时候，在X轴Y轴显示数值
-          axisPointer: {
-            type: 'cross'
-          },
-          triggerOn: 'mousemove',
-          enterable: true
-        },
-        dataZoom: [// 控制缩放
-          {
-            type: 'slider',
-            xAxisIndex: 0,
-            start: 0,
-            end: 100
-          },
-          {
-            type: 'inside',
-            xAxisIndex: 0,
-            start: 0,
-            end: 100
-          },
-          {
-            type: 'slider',
-            yAxisIndex: 0,
-            start: 0,
-            end: 100
-          },
-          {
-            type: 'inside',
-            yAxisIndex: 0,
-            start: 0,
-            end: 100
-          }
-        ],
-        // 工具箱
-        // 保存图片
-        toolbox: {
-          show: true,
-          feature: {
-            saveAsImage: {
-              show: true
-            }
-          }
-        },
-        // 图例-每一条数据的名字
-        legend: {
-          show: false,
-          data: this.nameofmovie
-        },
-        // x轴
-        xAxis: {
-          name: '时间',
-          data: this.da
-        },
-        // y轴没有显式设置，根据值自动生成y轴
-        yAxis: {
-          name: '收视率'
-        },
-        // 数据-data是最终要显示的数据
-        series: this.se
-      }
-      this.chart.setOption(option)
     },
     change (country) {
       this.nameo = []
@@ -162,10 +92,20 @@ export default {
             color: '#000000'
           },
           axisPointer: {
-            type: 'cross'
+            type: 'line'
           },
           triggerOn: 'mousemove',
-          enterable: true
+          enterable: true,
+          formatter: (params) => {
+            const newParams = [];
+            let paramsData = _.sortBy(params, 'value');
+            paramsData = _.reverse(paramsData);
+            paramsData.forEach((p) => {
+              const cont = p.marker + ' ' +p.seriesName + ': ' + p.value + '<br/>';
+              newParams.push(cont);
+            });
+            return _.join(newParams, '');
+          }
         },
         grid: {
             left: '5%'
