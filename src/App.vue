@@ -1,39 +1,23 @@
 <template>
-  <!-- <div id="app">
-    <img src="./assets/img/logo.png">
-    <div>
-      <p>
-        If Element is successfully added to this project, you'll see an
-        <code v-text="'<el-button>'"></code>
-        below
-      </p>
-      <el-button>el-button</el-button>
-    </div>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div> -->
   <div>
     <Abar/>
-    <AMain/>
+    <router-view></router-view>
+    <el-button @click="push()">click me!</el-button>
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-
-// export default {
-//   name: 'app',
-//   components: {
-//     HelloWorld
-//   }
-// }
 import Abar from './components/Abar'
-import AMain from './components/AMain'
 
 export default {
   name: 'app',
   components: {
-    Abar,
-    AMain
+    Abar
+  },
+  methods: {
+    push () {
+      this.$router.push('/bmain')
+    }
   }
 }
 

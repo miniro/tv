@@ -5,6 +5,8 @@
 <script>
 import echarts from 'echarts' // 引入组件
 import '@/../node_modules/echarts/map/js/world.js' // 引入组件
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'WorldMap',
   data () {
@@ -422,6 +424,30 @@ export default {
     this.getCountry();
   },
   methods: {
+    ...mapMutations([
+      'modifyCountry'
+    ]),
+    getCountry () {
+      this.chart.on('click', (params) =>{
+        switch (params.name) {
+          case '美国':
+            this.modifyCountry('America');
+            break;
+          case '中国':
+            this.modifyCountry('China');
+            break;
+          case '日本':
+            this.modifyCountry('Japan');
+            break;
+          case '英国':
+            this.modifyCountry('English');
+            break;
+          case '韩国':
+            this.modifyCountry('Korea');
+            break;
+        }
+      })
+    }
     // getCountry(){
     //   this.chart.on('click', (params) => {
     //     console.log(params.name);

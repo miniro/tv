@@ -10,6 +10,7 @@ import America from '@/api/popularity/America.json'
 import English from '@/api/popularity/English.json'
 import Japan from '@/api/popularity/Japan.json'
 import Korea from '@/api/popularity/Korea.json'
+import { mapState } from 'vuex'
 let _ = require('lodash')
 
 export default {
@@ -20,20 +21,22 @@ export default {
       se: [],
       nameo: [],
       da: [],
-      countryName: '中国'
+      countryName: 'America'
     }
+  },
+  computed: {
+    ...mapState({
+      currentCountry: state => state.countryName
+    })
   },
   mounted () {
     this.initChart()
     this.change(this.countryName)
-    // this.$EventBus.$on("getCountry",(val) => {
-    //   this.countryName = val;
-    // })
   },
   watch: {
-    countryName(val){
+    currentCountry(val){
       console.log(val + '1')
-      //this.currentCountry = val
+      this.countryName = val
       this.change(val)
     }
   },
@@ -47,17 +50,18 @@ export default {
       this.se = []
       this.da = []
       var coun
-      if (country === '中国') {
+      if (country === 'China') {
         coun = China
-      } else if (country === '美国') {
+      } else if (country === 'America') {
         coun = America
-      } else if (country === '英国') {
+      } else if (country === 'English') {
         coun = English
-      } else if (country === '日本') {
+      } else if (country === 'Japan') {
         coun = Japan
-      } else if (country === '韩国') {
+      } else if (country === 'Korea') {
         coun = Korea
       }
+      console.log(coun+'2')
       var beginDt = new Date('2019-11-20')
       var na = coun.nameofmovie
       var rat = coun.rating
@@ -76,10 +80,23 @@ export default {
         this.da.push(d)
         beginDt.setDate(beginDt.getDate() + 1)
       }
+      var ChineseOfCountryName;
+      switch (this.countryName) {
+        case 'America':
+          ChineseOfCountryName = '美国';break;
+        case 'China':
+          ChineseOfCountryName = '中国';break;
+        case 'Japan':
+          ChineseOfCountryName = '日本';break;
+        case 'English':
+          ChineseOfCountryName = '英国';break;
+        case 'Korea':
+          ChineseOfCountryName = '韩国';break;
+      }
       var option = {
       // 标题
         title: {
-          text: 'TMDB部分'+ this.countryName + '剧集热度',
+          text: 'TMDB部分'+ ChineseOfCountryName + '剧集热度',
           left: 15,
         },
         tooltip: {
@@ -165,10 +182,9 @@ export default {
       }
       this.chart.clear()
       this.chart.setOption(option)
-        // this.chart.on('click', (params) => {
-        //     console.log(params)
-        //     this.$router.push('/tv/' + params.seriesName)
-        // })
+      this.chart.on('click', (params) => {
+        this.$router.push('/bmain/' + params.seriesName)
+      })
     }
   }
 
