@@ -2,7 +2,6 @@
   <div>
     <Abar/>
     <router-view></router-view>
-    <el-button @click="push()">click me!</el-button>
   </div>
 </template>
 
@@ -14,10 +13,9 @@ export default {
   components: {
     Abar
   },
-  methods: {
-    push () {
-      this.$router.push('/bmain')
-    }
+  mounted: function () {
+    // 测试
+    this.$router.push('/bmain/la')
   }
 }
 
